@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class ChangeIndex : MonoBehaviour
 {
-    [SerializeField] private ChangeWeapon weaponChanger;
-    [SerializeField] private Sprite[] weapons;
+    public delegate void WeaponChangeManipulator(WeaponData[] weapon, int index);
+    public event WeaponChangeManipulator WeaponChanged;
+
+    [SerializeField] private WeaponData[] weapons;
 
     private int currentIndex = 0;
 
@@ -13,12 +15,18 @@ public class ChangeIndex : MonoBehaviour
     {
         if(Input.GetButtonDown("Fire1"))
         {
-            weaponChanger.ChangeGun(weapons, DecreaseIndex());
+            if (WeaponChanged != null)
+            {
+                WeaponChanged(weapons, DecreaseIndex());
+            }
         }
 
         if (Input.GetButtonDown("Fire2"))
         {
-            weaponChanger.ChangeGun(weapons, IncreaseIndex());
+            if (WeaponChanged != null)
+            {
+                WeaponChanged(weapons, IncreaseIndex());
+            }
         }
     }
 
